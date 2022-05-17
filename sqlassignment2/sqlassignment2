@@ -1,0 +1,36 @@
+1. Find out the number of documentaries with deleted scenes.
+*/
+
+select * from film where special_features="Deleted Scenes" and film_id in (select film_id from film_category where category_id in 
+(select category_id from category where name="Documentary"));
+
+
+/*
+2. Find out the number of sci-fi movies rented by the store managed by Jon Stephens.
+*/
+
+select count(title) from film where film_id in (select film_id from film_category where category_id in (select category_id from category where name="Sci-fi")) and 
+film_id in (select film_id from inventory where store_id in(select store_id from store where manager_staff_id in (select staff_id from staff where first_name="Jon" and last_name=
+"Stephens")));
+
+/*
+3. Find out the total sales from Animation movies.
+*/
+
+select sum(amount) from payment where staff_id in (select staff_id from staff where store_id in (select store_id from store where store_id in
+ (select store_id from inventory where film_id in (select film_id from film where film_id in (select film_id from film_category where category_id in 
+ (select category_id from category where name="Animation"))))));
+ 
+ /*
+ 4. Find out the top 3 rented category of movies by “PATRICIA JOHNSON”.
+ */
+ 
+ select title from film where film_id in (select film_id from film_actor where actor_id in 
+ (select actor_id from actor where first_name="PATRICIA" and last_name="JOHNSON")) order by rental_rate limit 3;
+ 
+ /*
+5. Find out the number of R rated movies rented by “SUSAN DAVIS”.
+*/
+
+select title from film where film_id in (select film_id from film_actor where actor_id in 
+ (select actor_id from actor where first_name="SUSAN" and last_name="DAVIS")) and rating="R";
